@@ -9,7 +9,8 @@ axios.interceptors.request.use(async (config) => {
     const appId = await openweatherApiKey;
     config.params = {
         ...config.params,
-        appid: appId
+        appid: appId,
+        units: 'imperial'
     }
     return config
 })
@@ -58,8 +59,8 @@ const getGeo = async (city: string) => {
 
 const getWeather = async (lon: number, lat: number, city: string): Promise<HttpResponseBody> => {
 
-    const redisWeatherPrefix = `${city}-weather`;
-    const cache = await redis.get(redisWeatherPrefix);
+    const redisWeatherKey = `${city}-weather`;
+    const cache = await redis.get(redisWeatherKey);
 
     if (cache) {
         return cache
@@ -86,8 +87,9 @@ const getWeather = async (lon: number, lat: number, city: string): Promise<HttpR
         }
     }
 
-    await redis.set(redisWeatherPrefix, responseBody, {
-        EX: 60
+    const EXPIRE_IN_SECONDS = 60;
+    await redis.set(redisWeatherKey, responseBody, {
+        EX: EXPIRE_IN_SECONDS
     })
 
     return responseBody

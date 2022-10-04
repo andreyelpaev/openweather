@@ -1,19 +1,25 @@
 #root {
-  display: flex;
-  padding-top: 12px;
-  justify-content: center;
-  width: 100%;
+    display: flex;
+    padding-top: 12px;
+    justify-content: center;
+    width: 100%;
 }
 
 input {
-  outline: none;
-  font-size: 18px;
+    outline: none;
+    font-size: 18px;
 }
 
 .weather-app {
-  max-width: 400px;
+    max-width: 400px;
 }
 
 .weather-app-controls {
-  display: flex;
+    display: flex;
+    padding-bottom: 12px;
+}
+
+.weather-app-results {
+    font-size: 18px;
+
 }

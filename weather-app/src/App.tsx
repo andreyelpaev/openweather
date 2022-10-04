@@ -18,7 +18,7 @@ function App() {
             }
         }
 
-        fetchWeather()
+        fetchWeather().catch(console.error)
     }
 
     return (
@@ -27,7 +27,7 @@ function App() {
                 <input placeholder="Enter city" type="text" onChange={(e) => setCity(e.target.value)}/>
                 <input type="button" value="Search" onClick={handleSearch}/>
             </div>
-            {weather ? <MemozedWeatherResult {...weather} /> : <NotFound/>}
+            {weather ? <MemoizedWeatherResult {...weather} /> : <NotFound/>}
         </div>
     )
 }
@@ -42,17 +42,17 @@ const NotFound = () => {
 
 const WeatherResult = (weather: HttpResponseBody) => {
     return (
-        <React.Fragment>
+        <div className="weather-app-results">
             <div>City: {weather?.city}</div>
-            <div>Temperature: {weather?.temperature}</div>
-            <div>Wind speed: {weather?.wind.speed} km/h</div>
+            <div>Temperature: {weather?.temperature} °F</div>
+            <div>Wind speed: {weather?.wind.speed} m/s</div>
             <div>Wind direction: {weather?.wind.direction}</div>
-            <div>Pressure: {weather?.weatherCondition.pressure}</div>
-            <div>Humidity: {weather?.weatherCondition.humidity}</div>
-        </React.Fragment>
+            <div>Pressure: {weather?.weatherCondition.pressure} hPa</div>
+            <div>Humidity: {weather?.weatherCondition.humidity} %</div>
+        </div>
     )
 }
 
-const MemozedWeatherResult = React.memo(WeatherResult)
+const MemoizedWeatherResult = React.memo(WeatherResult)
 
 export default App
