@@ -1,25 +1,66 @@
 #root {
     display: flex;
-    padding-top: 12px;
     justify-content: center;
     width: 100%;
+    background-color: #f2f2f2;
+    align-items: center;
+    --primary: #48484a;
 }
 
 input {
     outline: none;
-    font-size: 18px;
+    font-size: 13px;
+    border: none;
+    height: 24px;
+}
+
+input[type="text"] {
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    min-width: 300px;
+}
+
+input[type="button"] {
+    background-color: var(--primary);
+    color: white;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+input[type="button"]:hover {
+    background-color: rgba(72, 72, 74, .85);
+    cursor: pointer;
 }
 
 .weather-app {
-    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    height: 400px;
 }
 
 .weather-app-controls {
     display: flex;
-    padding-bottom: 12px;
+    padding: 12px;
+    width: 100%;
 }
 
 .weather-app-results {
     font-size: 18px;
+    color: var(--primary);
+    display: flex
+}
 
+.weather-app-result-other {
+    line-height: 32px;
+    width: 100%;
+}
+
+.weather-app-result-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.weather-app-result-item span:last-child {
+    font-weight: bold;
 }

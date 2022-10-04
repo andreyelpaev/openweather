@@ -3,7 +3,7 @@ import './App.css'
 import {HttpResponseBody} from "../../src/types/http-response-body";
 
 function App() {
-    const [city, setCity] = useState('');
+    const [city, setCity] = useState<string | null>(null);
     const [weather, setWeather] = useState<HttpResponseBody | null>(null);
 
     const handleSearch = () => {
@@ -27,7 +27,7 @@ function App() {
                 <input placeholder="Enter city" type="text" onChange={(e) => setCity(e.target.value)}/>
                 <input type="button" value="Search" onClick={handleSearch}/>
             </div>
-            {weather ? <MemoizedWeatherResult {...weather} /> : <NotFound/>}
+            {weather && <MemoizedWeatherResult {...weather} />}
         </div>
     )
 }
@@ -35,7 +35,7 @@ function App() {
 const NotFound = () => {
     return (
         <React.Fragment>
-            <div>City not found!</div>
+            <div className="weather-app-not-found">City not found!</div>
         </React.Fragment>
     )
 }
@@ -43,12 +43,32 @@ const NotFound = () => {
 const WeatherResult = (weather: HttpResponseBody) => {
     return (
         <div className="weather-app-results">
-            <div>City: {weather?.city}</div>
-            <div>Temperature: {weather?.temperature} °F</div>
-            <div>Wind speed: {weather?.wind.speed} m/s</div>
-            <div>Wind direction: {weather?.wind.direction}</div>
-            <div>Pressure: {weather?.weatherCondition.pressure} hPa</div>
-            <div>Humidity: {weather?.weatherCondition.humidity} %</div>
+            <div className="weather-app-result-other">
+                <div className="weather-app-result-item">
+                    <span>Temperature:</span>
+                    <span>{weather?.temperature} °F</span>
+                </div>
+                <div className="weather-app-result-item">
+                    <span>City:</span>
+                    <span>{weather?.city}</span>
+                </div>
+                <div className="weather-app-result-item">
+                    <span>Wind speed:</span>
+                    <span>{weather?.wind.speed} m/s</span>
+                </div>
+                <div className="weather-app-result-item">
+                    <span>Wind direction:</span>
+                    <span>{weather?.wind.direction}</span>
+                </div>
+                <div className="weather-app-result-item">
+                    <span>Pressure: </span>
+                    <span>{weather?.weatherCondition.pressure} hPa</span>
+                </div>
+                <div className="weather-app-result-item">
+                    <span>Humidity:</span>
+                    <span>{weather?.weatherCondition.humidity} %</span>
+                </div>
+            </div>
         </div>
     )
 }
