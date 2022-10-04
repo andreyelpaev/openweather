@@ -18,13 +18,18 @@ axios.interceptors.request.use(async (config) => {
 export function respondJson(body: object, statusCode: number) {
     return {
         statusCode,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
         body: JSON.stringify(body)
     };
 }
 
 const getGeo = async (city: string) => {
     const cache = await redis.get(city);
-    if(cache) {
+    if (cache) {
         return cache
     }
     const response = await axios.get<OpenWeatherLonLatResponse>('https://api.openweathermap.org/geo/1.0/direct', {
@@ -33,11 +38,13 @@ const getGeo = async (city: string) => {
         }
     });
 
-    if(response.status === StatusCodes.OK) {
+    if (response.status === StatusCodes.OK) {
         const lon = response.data[0]?.lon;
         const lat = response.data[0]?.lat;
 
-        await redis.set(city, {lon, lat});
+        await redis.set(city, {lon, lat}, {
+            NX: true
+        });
 
         return {
             lon,
@@ -52,7 +59,7 @@ const getWeather = async (lon: number, lat: number, city: string): Promise<HttpR
     const redisWeatherPrefix = 'weather';
     const cache = await redis.get(`${city}-${redisWeatherPrefix}`);
 
-    if(cache) {
+    if (cache) {
         return cache
     }
 
@@ -93,10 +100,10 @@ export async function handler(event: HttpEventRequest<{ city: string }>) {
         const city = event.queryStringParameters.city;
         const geo = await getGeo(city);
         const weather = await getWeather(geo?.lon!, geo?.lat!, city);
-        return respondJson({...weather}, StatusCodes.OK);
+        return respondJson(weather, StatusCodes.OK);
 
     } catch (e) {
-        if(axios.isAxiosError(e)) {
+        if (axios.isAxiosError(e)) {
             return respondJson({error: e.message}, StatusCodes.BAD_REQUEST);
         }
     }

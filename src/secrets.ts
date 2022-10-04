@@ -13,4 +13,4 @@ export const openweatherApiKey = new Promise<string>((resolve, reject) => {
         const secret = JSON.parse(data?.SecretString!) as OpenWeatherSecret
         resolve(secret.openweather_key)
     });
-})
+});

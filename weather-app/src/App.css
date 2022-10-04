@@ -1,0 +1,19 @@
+#root {
+  display: flex;
+  padding-top: 12px;
+  justify-content: center;
+  width: 100%;
+}
+
+input {
+  outline: none;
+  font-size: 18px;
+}
+
+.weather-app {
+  max-width: 400px;
+}
+
+.weather-app-controls {
+  display: flex;
+}
