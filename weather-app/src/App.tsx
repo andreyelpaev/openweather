@@ -50,7 +50,7 @@ const WeatherResult = (weather: HttpResponseBody) => {
             <div className="weather-app-result-other">
                 <div className="weather-app-result-item">
                     <span>Temperature:</span>
-                    <span>{weather?.temperature} °F</span>
+                    <span>{weather?.temperature?.toFixed(0)} °F</span>
                 </div>
                 <div className="weather-app-result-item">
                     <span>City:</span>
@@ -58,7 +58,7 @@ const WeatherResult = (weather: HttpResponseBody) => {
                 </div>
                 <div className="weather-app-result-item">
                     <span>Wind speed:</span>
-                    <span>{weather?.wind.speed} m/s</span>
+                    <span>{weather?.wind.speed?.toFixed(1)} m/s</span>
                 </div>
                 <div className="weather-app-result-item">
                     <span>Wind direction:</span>
