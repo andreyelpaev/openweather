@@ -5,7 +5,7 @@ const client = new SecretsManager({
     region: 'us-east-1',
 })
 
-export const openweatherApiKey = new Promise<string>((resolve, reject) => {
+export const openWeatherApiKey = new Promise<string>((resolve, reject) => {
     client.getSecretValue({SecretId: 'prod/openweather/key'}, (err, data) => {
         if (err) {
             reject(err)

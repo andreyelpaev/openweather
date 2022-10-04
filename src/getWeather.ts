@@ -1,12 +1,12 @@
 import axios from 'axios';
 import {StatusCodes, getReasonPhrase} from 'http-status-codes'
-import {openweatherApiKey} from "./secrets";
+import {openWeatherApiKey} from "./secrets";
 import {OpenWeatherLonLatResponse, HttpEventRequest, OpenWeatherResponse, HttpResponseBody} from "./types/public-api";
 import * as redis from "./redis-client";
 import {degreeToHumanFormat} from "./utils/degrees-to-human-format";
 
 axios.interceptors.request.use(async (config) => {
-    const appId = await openweatherApiKey;
+    const appId = await openWeatherApiKey;
     config.params = {
         ...config.params,
         appid: appId,
@@ -28,7 +28,7 @@ export function respondJson(body: object, statusCode: number) {
     };
 }
 
-const getGeo = async (city: string) => {
+const getGeoCoords = async (city: string) => {
     const cache = await redis.get(city);
 
     if (cache) {
@@ -97,14 +97,18 @@ const getWeather = async (lon: number, lat: number, city: string): Promise<HttpR
 
 export async function handler(event: HttpEventRequest<{ city: string }>) {
     if (event.queryStringParameters === null) {
-        return respondJson({error: getReasonPhrase(StatusCodes.BAD_REQUEST)}, StatusCodes.BAD_REQUEST)
+         return respondJson({error: getReasonPhrase(StatusCodes.BAD_REQUEST)}, StatusCodes.BAD_REQUEST)
     }
 
     try {
-        const city = event.queryStringParameters.city;
-        const geo = await getGeo(city);
-        const weather = await getWeather(geo?.lon!, geo?.lat!, city);
-        return respondJson(weather, StatusCodes.OK);
+        if('city' in event.queryStringParameters) {
+            const city = event.queryStringParameters.city;
+            const geo = await getGeoCoords(city);
+            const weather = await getWeather(geo?.lon!, geo?.lat!, city);
+            return respondJson(weather, StatusCodes.OK);
+        }
+
+        return respondJson({error: getReasonPhrase(StatusCodes.BAD_REQUEST)},  StatusCodes.BAD_REQUEST)
 
     } catch (e) {
         if (axios.isAxiosError(e)) {
