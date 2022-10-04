@@ -37,7 +37,7 @@ const getGeo = async (city: string) => {
         const lon = response.data[0]?.lon;
         const lat = response.data[0]?.lat;
 
-        await redis.set(city, JSON.stringify({lon, lat}));
+        await redis.set(city, {lon, lat});
 
         return {
             lon,
@@ -77,7 +77,7 @@ const getWeather = async (lon: number, lat: number, city: string): Promise<HttpR
         }
     }
 
-    await redis.set(redisWeatherPrefix, JSON.stringify(responseBody), {
+    await redis.set(redisWeatherPrefix, responseBody, {
         EX: 60
     })
 

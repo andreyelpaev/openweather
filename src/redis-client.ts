@@ -19,8 +19,8 @@ const get = async (key: string) => {
     return result ? JSON.parse(result) : null;
 }
 
-const set = async (key: string, value: any, options?: object) => {
-    return await client.set(`${REDIS_PREFIX}-${key.toLowerCase()}`, value, options);
+const set = async (key: string, value: object, options?: object) => {
+    return await client.set(`${REDIS_PREFIX}-${key.toLowerCase()}`, JSON.stringify(value), options);
 }
 
 export {
