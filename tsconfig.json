@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "outDir": ".build",
+    "rootDir": "./",
+    "module": "commonjs",
+    "lib": ["es2019"],
+    "target": "es2019"
+  }
+}

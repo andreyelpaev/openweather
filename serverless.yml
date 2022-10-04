@@ -1,0 +1,22 @@
+service: aws-lamda-weather-app
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-east-1
+  vpc:
+    securityGroupIds:
+      - sg-0708fe6bdb3c76a24
+    subnetIds:
+      - subnet-05f7c8361995ac60b
+functions:
+  getCurrent:
+    handler: src/getWeather.handler
+    events:
+      - http:
+          path: /v1/getCurrentWeather
+          method: get
