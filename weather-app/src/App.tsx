@@ -5,6 +5,7 @@ import {HttpResponseBody} from "../../src/types/http-response-body";
 function App() {
     const [city, setCity] = useState<string | null>(null);
     const [weather, setWeather] = useState<HttpResponseBody | null>(null);
+    const [error, setError] = useState<{ error: boolean } | null>(null);
 
     const handleSearch = () => {
         const fetchWeather = async () => {
@@ -13,7 +14,9 @@ function App() {
             if (data.ok) {
                 const json = await data.json()
                 setWeather(json);
+                setError(null);
             } else {
+                setError({error: true})
                 setWeather(null)
             }
         }
@@ -28,6 +31,7 @@ function App() {
                 <input type="button" value="Search" onClick={handleSearch}/>
             </div>
             {weather && <MemoizedWeatherResult {...weather} />}
+            {error?.error && <NotFound />}
         </div>
     )
 }
