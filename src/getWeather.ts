@@ -29,9 +29,11 @@ export function respondJson(body: object, statusCode: number) {
 
 const getGeo = async (city: string) => {
     const cache = await redis.get(city);
+
     if (cache) {
         return cache
     }
+
     const response = await axios.get<OpenWeatherLonLatResponse>('https://api.openweathermap.org/geo/1.0/direct', {
         params: {
             q: city
@@ -56,8 +58,8 @@ const getGeo = async (city: string) => {
 
 const getWeather = async (lon: number, lat: number, city: string): Promise<HttpResponseBody> => {
 
-    const redisWeatherPrefix = 'weather';
-    const cache = await redis.get(`${city}-${redisWeatherPrefix}`);
+    const redisWeatherPrefix = `${city}-weather`;
+    const cache = await redis.get(redisWeatherPrefix);
 
     if (cache) {
         return cache
